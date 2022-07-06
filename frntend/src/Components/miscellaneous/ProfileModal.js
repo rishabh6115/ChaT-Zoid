@@ -24,7 +24,9 @@ const ProfileModal = ({ user, children }) => {
       {children ? (
         <span onClick={onOpen}>{children}</span>
       ) : (
-        <IconButton d="flex" icon={<ViewIcon />} onClick={onOpen} />
+        <Button d="flex" onClick={onOpen} colorScheme="facebook" size="sm">
+          View Profile
+        </Button>
       )}
 
       <Modal size="lg" isOpen={isOpen} onClose={onClose}>

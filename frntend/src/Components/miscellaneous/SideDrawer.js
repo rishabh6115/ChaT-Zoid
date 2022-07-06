@@ -31,6 +31,8 @@ import { useHistory } from "react-router";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
+import { getSender } from "../../Config/ChatLogic";
+import NotificationBadge, { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -38,7 +40,15 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
-  const { user, SelectedChat, setSelectedChat, chats, setChats } = ChartState();
+  const {
+    user,
+    SelectedChat,
+    setSelectedChat,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = ChartState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
   const toast = useToast();
@@ -118,7 +128,8 @@ const SideDrawer = () => {
         bg="white"
         w="100%"
         p="5px 10px 5px 10px"
-        borderWidth="5px"
+        borderBottom="1px"
+        borderColor="gray.400"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
@@ -130,14 +141,41 @@ const SideDrawer = () => {
         </Tooltip>
 
         <Text fontSize="3xl" fontFamily="Work sans" fontWeight="extrabold">
-          Chat-Zoid
+          ChaT-Zoid
         </Text>
         <div>
           <Menu>
             <MenuButton p={1}>
-              <BellIcon m={1} fontSize="2xl" />
+              <NotificationBadge
+                count={notification.length}
+                effect={Effect.SCALE}
+              />
+              <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList pl={2}>
+              {!notification.length && "No new messages"}
+              {notification.map((singleNotification) => (
+                <MenuItem
+                  key={singleNotification._id}
+                  onClick={() => {
+                    setSelectedChat(singleNotification.chat);
+                    setNotification(
+                      notification.filter(
+                        (nn) =>
+                          nn.chat.sender !== singleNotification.chat.sender
+                      )
+                    );
+                  }}
+                >
+                  {singleNotification.chat.isGroupChat
+                    ? `New message from ${singleNotification.chat.chatName}`
+                    : `New message from ${getSender(
+                        user,
+                        singleNotification.chat.users
+                      )}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>

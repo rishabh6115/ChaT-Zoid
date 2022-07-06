@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -10,11 +10,12 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChartState();
-
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const fetchChats = async () => {
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -23,6 +24,7 @@ const MyChats = ({ fetchAgain }) => {
 
       const { data } = await axios.get("/api/chat", config);
       setChats(data);
+      setLoading(false);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -43,34 +45,47 @@ const MyChats = ({ fetchAgain }) => {
     return user._id === users[0]._id ? users[1].name : users[0].name;
   };
 
+  const getSenderPic = (loggedUser, users) => {
+    return users[0]._id === loggedUser._id ? users[1].pic : users[0].pic;
+  };
   return (
     <Box
       d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
       p={3}
-      bg="white"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
+      bg="#F8F8F8"
+      borderRightRadius="0"
     >
       <Box
         pb={3}
         px={3}
         fontSize={{ base: "28px", md: "18px", lg: "25px" }}
         fontWeight="bold"
-        fontFamily="Work sans"
         d="flex"
         w="100%"
         justifyContent="space-between"
         alignItems="center"
+        borderBottom="1px"
+        borderColor="gray.200"
       >
-        My Chats
+        <Box className="flex">
+          <Text className="chats">Messages</Text>
+          <Box className="chats-length" bg="facebook.300">
+            <Text color="black"> {chats.length}</Text>
+          </Box>
+        </Box>
         <GroupChatModal>
           <Button
             d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            fontSize={{ base: "17px", md: "10px", lg: "15px" }}
             rightIcon={<AddIcon />}
+            size={{ lg: "sm" }}
+            py="10px"
+            px="8px"
           >
             New Group Chat
           </Button>
@@ -80,33 +95,70 @@ const MyChats = ({ fetchAgain }) => {
         d="flex"
         flexDir="column"
         p={3}
-        bg="#F8F8F8"
         w="100%"
         h="100%"
         borderRadius="lg"
         overflowY="hidden"
+        marginTop="3px"
+        padding="0"
       >
-        {chats ? (
+        {loading ? (
+          <ChatLoading />
+        ) : (
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "black"}
                 px={3}
                 py={2}
-                borderRadius="lg"
                 key={chat._id}
+                marginTop="5px"
+                bg={selectedChat === chat ? "facebook.200" : "#white"}
+                display="flex"
+                borderRadius="lg"
               >
-                <Text>
-                  {!chat.isGroupChat ? namefn(chat.users) : chat.chatName}
-                </Text>
+                <Box>
+                  {
+                    <Avatar
+                      size="md"
+                      marginRight="10px"
+                      bg="facebook.100"
+                      name={
+                        !chat.isGroupChat ? namefn(chat.users) : chat.chatName
+                      }
+                      src={
+                        !chat.isGroupChat ? getSenderPic(user, chat.users) : ""
+                      }
+                    />
+                  }
+                </Box>
+                <span>
+                  <Text fontWeight="bold" color="#4e7ef0">
+                    {!chat.isGroupChat ? namefn(chat.users) : chat.chatName}
+                  </Text>
+                  <Text
+                    marginTop="-4px"
+                    color="black"
+                    fontWeight="bold"
+                    fontSize="small"
+                  >
+                    {chat.latestMessage ? (
+                      chat.latestMessage.content.length > 50 ? (
+                        <span>
+                          {chat.latestMessage.content.slice(0, 51)}...{" "}
+                        </span>
+                      ) : (
+                        chat.latestMessage.content
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </Text>
+                </span>
               </Box>
             ))}
           </Stack>
-        ) : (
-          <ChatLoading />
         )}
       </Box>
     </Box>

@@ -26,6 +26,7 @@ const GroupChatModal = ({ children }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [groupCreateLoading, setGroupCreateLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const toast = useToast();
@@ -33,10 +34,9 @@ const GroupChatModal = ({ children }) => {
   const { user, chats, setChats } = ChartState();
 
   const handleSearch = async (q) => {
-    if (q === "") {
+    if (!q) {
       return;
     }
-    console.log(q);
     setSearch(q);
     try {
       setLoading(true);
@@ -45,8 +45,7 @@ const GroupChatModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
+      const { data } = await axios.get(`/api/user?search=${q}`, config);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -62,9 +61,9 @@ const GroupChatModal = ({ children }) => {
   };
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
-      if (selectedUsers.length < 3) {
+      if (selectedUsers.length < 2) {
         toast({
-          title: "Group should have more than two users",
+          title: "Group should have more than one users",
           status: "warning",
           duration: 5000,
           isClosable: true,
@@ -83,6 +82,7 @@ const GroupChatModal = ({ children }) => {
     }
 
     try {
+      setGroupCreateLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -99,6 +99,7 @@ const GroupChatModal = ({ children }) => {
       );
 
       setChats([data, ...chats]);
+      setGroupCreateLoading(false);
       onClose();
       toast({
         title: "Group Created",
@@ -194,7 +195,11 @@ const GroupChatModal = ({ children }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit}>
+            <Button
+              colorScheme="blue"
+              onClick={handleSubmit}
+              isLoading={groupCreateLoading}
+            >
               Create Group
             </Button>
           </ModalFooter>

@@ -5,3 +5,9 @@
   min-height: 100vh;
   background: url("./background.png") no-repeat center/cover;
 }
+.message {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}

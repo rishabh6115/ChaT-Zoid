@@ -5,15 +5,19 @@ const ChatLoading = () => {
   return (
     <div>
       <Stack>
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
-        <Skeleton height="50px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
       </Stack>
     </div>
   );

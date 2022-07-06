@@ -54,11 +54,9 @@ const SignUp = () => {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
-          console.log(data.url);
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           setLoading(false);
         });
     } else {
@@ -93,6 +91,8 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
+      setLoading(false);
+      return;
     }
     try {
       const config = {

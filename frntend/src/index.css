@@ -1,5 +1,32 @@
+*::after,
+::focus {
+  outline: none;
+}
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhai+2&family=Work+Sans&display=swap");
+
+* {
+  /* font-family: "Work Sans", sans-serif; */
+  font-family: "Baloo Bhai 2", cursive;
+}
 ::-webkit-scrollbar {
   display: none;
 }
+* {
+  -moz-user-select: none !important ;
+  -khtml-user-select: none !important;
+  -webkit-user-select: none !important;
+}
 
-/* Hide scrollbar for IE, Edge and Firefox */
+.chats {
+  margin-right: 5px;
+}
+.chats-length {
+  font-size: 16px;
+  padding: 0px 7px;
+  background: rgba(21, 21, 225, 0.342);
+  border-radius: 5px;
+}
+.flex {
+  display: flex;
+  align-items: center;
+}
