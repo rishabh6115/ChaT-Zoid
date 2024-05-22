@@ -13,7 +13,7 @@ Uses Socket.io for real time communication and stores user details in encrypted 
   
 ## Demo
 
-https://chat-frontend-vert-mu.vercel.app/
+https://mern-chat-app01.vercel.app/
 
 ![](https://github.com/rishabh6115/MERN-Chat-App/blob/main/Screenshots/mainscreen.png?raw=true)
 
