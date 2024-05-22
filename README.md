@@ -13,7 +13,7 @@ Uses Socket.io for real time communication and stores user details in encrypted 
   
 ## Demo
 
-https://mern-chat-app01.herokuapp.com/
+https://chat-frontend-vert-mu.vercel.app/
 
 ![](https://github.com/rishabh6115/MERN-Chat-App/blob/main/Screenshots/mainscreen.png?raw=true)
 
@@ -25,7 +25,7 @@ https://mern-chat-app01.herokuapp.com/
 Clone the project
 
 ```bash
-  git clone https://github.com/piyush-eon/mern-chat-app
+  git clone https://github.com/rishabh6115/ChaT-Zoid.git
 ```
 
 Go to the project directory
